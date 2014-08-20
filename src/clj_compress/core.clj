@@ -5,24 +5,21 @@
            [java.io OutputStream FileOutputStream FileInputStream]
            [org.apache.commons.io IOUtils]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
-
-(let [zipFile (io/file "target.gz")
+(defn files->zip [files zipFilePath]
+  (let [zipFile (io/file zipFilePath)
       fo (FileOutputStream. zipFile)
       archiveOut (-> (ArchiveStreamFactory.)
-                     (.createArchiveOutputStream ArchiveStreamFactory/ZIP fo))
-      files [(io/file "LICENSE")]]
+                     (.createArchiveOutputStream ArchiveStreamFactory/ZIP fo))]
   (doseq [f files]
     (.putArchiveEntry archiveOut (ZipArchiveEntry. (.getName f)))
     (IOUtils/copy (FileInputStream. f) archiveOut)
     (.closeArchiveEntry archiveOut))
   (.close archiveOut)
   (.close fo)
-  zipFile)
+  zipFile))
+
+(files->zip [(io/file "LICENSE")] "target1.gz")
+
 
 
 
