@@ -6,6 +6,10 @@ This project is a wrapper of Apache Common Compress. The reason I write it becau
 
 In development. Not ready to use.
 
+# Credits
+
+http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.compress.utils.IOUtils
+
 ## Usage
 
 FIXME
