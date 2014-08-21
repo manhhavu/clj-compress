@@ -4,15 +4,15 @@
            [org.apache.commons.compress.archivers.zip ZipArchiveEntry]
            [java.io OutputStream FileOutputStream FileInputStream]))
 
-(defn files->zip [files zipFilePath]
-  (let [zipFile (io/file zipFilePath)
-      fo (FileOutputStream. zipFile)
-      archiveOut (-> (ArchiveStreamFactory.)
+(defn files->zip [files zip-file-path]
+  (let [zip-file (io/file zip-file-path)
+      fo (FileOutputStream. zip-file)
+      archive (-> (ArchiveStreamFactory.)
                      (.createArchiveOutputStream ArchiveStreamFactory/ZIP fo))]
   (doseq [f files]
     (.putArchiveEntry archiveOut (ZipArchiveEntry. (.getName f)))
-    (io/copy (FileInputStream. f) archiveOut)
-    (.closeArchiveEntry archiveOut))
-  (.close archiveOut)
+    (io/copy (FileInputStream. f) archive)
+    (.closeArchiveEntry archive))
+  (.close archive)
   (.close fo)
-  zipFile))
+  zip-file))
