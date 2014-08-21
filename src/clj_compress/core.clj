@@ -3,7 +3,7 @@
   (:import [org.apache.commons.compress.archivers ArchiveInputStream ArchiveStreamFactory]
            [org.apache.commons.compress.archivers.zip ZipArchiveEntry]
            [java.io OutputStream FileOutputStream FileInputStream]
-           [org.apache.commons.io IOUtils]))
+           [com.google.common.io ByteStreams]))
 
 (defn files->zip [files zipFilePath]
   (let [zipFile (io/file zipFilePath)
@@ -12,15 +12,9 @@
                      (.createArchiveOutputStream ArchiveStreamFactory/ZIP fo))]
   (doseq [f files]
     (.putArchiveEntry archiveOut (ZipArchiveEntry. (.getName f)))
-    (IOUtils/copy (FileInputStream. f) archiveOut)
+    (ByteStreams/copy (FileInputStream. f) archiveOut)
     (.closeArchiveEntry archiveOut))
   (.close archiveOut)
   (.close fo)
   zipFile))
-
-(files->zip [(io/file "LICENSE")] "target1.gz")
-
-
-
-
 
