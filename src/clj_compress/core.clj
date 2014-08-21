@@ -2,8 +2,7 @@
   (:require [clojure.java.io :as io])
   (:import [org.apache.commons.compress.archivers ArchiveInputStream ArchiveStreamFactory]
            [org.apache.commons.compress.archivers.zip ZipArchiveEntry]
-           [java.io OutputStream FileOutputStream FileInputStream]
-           [com.google.common.io ByteStreams]))
+           [java.io OutputStream FileOutputStream FileInputStream]))
 
 (defn files->zip [files zipFilePath]
   (let [zipFile (io/file zipFilePath)
@@ -12,9 +11,8 @@
                      (.createArchiveOutputStream ArchiveStreamFactory/ZIP fo))]
   (doseq [f files]
     (.putArchiveEntry archiveOut (ZipArchiveEntry. (.getName f)))
-    (ByteStreams/copy (FileInputStream. f) archiveOut)
+    (io/copy (FileInputStream. f) archiveOut)
     (.closeArchiveEntry archiveOut))
   (.close archiveOut)
   (.close fo)
   zipFile))
-
